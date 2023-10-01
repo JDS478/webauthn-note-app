@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   has_many :credentials
 
+  validates :username, uniqueness: true
+
   def initialize_webauthn_id
     # user.update!(webauthn_id: WebAuthn.generate_user_id)
     self.webauthn_id = WebAuthn.generate_user_id

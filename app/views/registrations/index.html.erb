@@ -3,12 +3,12 @@
   <%= form_with model: @user, url: registrations_path do |f| %>
     <div class="mb-3">
       <%= f.label 'username', for: :username %>
-      <%= f.text_field :username, placeholder: 'someone123', class: 'form-control' %>
+      <%= f.text_field :username, placeholder: 'someone123', required: true, class: 'form-control' %>
     </div>
     <div class="mb-3">
-      <h4>Setup a Credential Nickname</h4>
+      <h4>Setup a Credential Nickname *</h4>
       <%= f.label 'Credential Nickname', for: :nickname %>
-      <%= f.text_field :nickname, placeholder: 'E.g. Iphone', class: 'form-control' %>
+      <%= f.text_field :nickname, placeholder: 'E.g. Iphone', required: true, class: 'form-control' %>
     </div>
     <%= f.submit 'Signup', class: 'btn btn-primary' %>
   <% end %>
