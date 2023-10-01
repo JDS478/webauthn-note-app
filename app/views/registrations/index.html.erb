@@ -1,14 +1,19 @@
 <div class="m-auto w-25 border p-2">
   <h1>New registration</h1>
+  <div class="bg-danger">
+    <% if flash.notice %>
+        <div class="signup-alert alert-text">
+        <% flash.notice.each do |notice| %>
+          <p><%= notice %></p>
+        <% end %>
+        </div>
+      <% end %>
+  </div>
+
   <%= form_with model: @user, url: registrations_path do |f| %>
     <div class="mb-3">
       <%= f.label 'username', for: :username %>
       <%= f.text_field :username, placeholder: 'someone123', required: true, class: 'form-control' %>
-    </div>
-    <div class="mb-3">
-      <h4>Setup a Credential Nickname *</h4>
-      <%= f.label 'Credential Nickname', for: :nickname %>
-      <%= f.text_field :nickname, placeholder: 'E.g. Iphone', required: true, class: 'form-control' %>
     </div>
     <%= f.submit 'Signup', class: 'btn btn-primary' %>
   <% end %>

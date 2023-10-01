@@ -6,17 +6,14 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    # raise
     @user = User.new(user_params)
-    # TODO: Setup credential creation
 
     if @user.save
       login_user(@user)
 
-      # Render a json with webauth options
-      # redirect_to dashboard_path
+      redirect_to dashboard_index_path
     else
-      flash[:error] = @user.errors.full_messages.uniq
+      flash[:notice] = @user.errors.full_messages.uniq
 
       redirect_to registrations_path
     end
@@ -25,7 +22,7 @@ class RegistrationsController < ApplicationController
   private
 
   def login_user(user)
-    cookies.signed[:sign_in_token] = user.id
+    cookies.signed[:signin_token] = user.id
   end
 
   def user_params
