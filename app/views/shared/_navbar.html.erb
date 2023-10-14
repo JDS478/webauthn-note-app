@@ -13,7 +13,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Credentials</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Signout</a></li>
+            <li><%= link_to 'Logout', signout_path, data: {turbo_method: :delete}, class: 'dropdown-item' %></li>
           </ul>
         </li>
       </ul>
