@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 
   resources :registrations, only: %i[index create] do
     collection do
-      post :cred_login
+      get :cred_login
+      post :cred_callback
     end
   end
 
