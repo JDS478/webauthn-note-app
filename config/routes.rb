@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :notes, except: :index
+
   resources :dashboard, only: %i[index] do
     collection do
       post :callback
