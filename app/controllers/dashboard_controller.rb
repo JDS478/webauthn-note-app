@@ -5,5 +5,7 @@ class DashboardController < ApplicationController
 
   def index; end
 
+  def cred_options; end
+
   def callback; end
 end

@@ -19,6 +19,8 @@ class RegistrationsController < ApplicationController
     end
   end
 
+  def cred_login; end
+
   private
 
   def login_user(user)

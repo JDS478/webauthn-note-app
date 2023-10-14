@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  resources :registrations, only: %i[index create]
+  root 'dashboard#index'
+
+  resources :registrations, only: %i[index create] do
+    collection do
+      :cred_login
+    end
+  end
 
   resources :dashboard, only: %i[index] do
     collection do
