@@ -4,6 +4,7 @@ class User < ApplicationRecord
   before_create :initialize_webauthn_id
 
   has_many :credentials
+  has_many :notes
 
   validates :username, uniqueness: true
 

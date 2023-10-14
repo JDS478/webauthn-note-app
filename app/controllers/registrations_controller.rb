@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class RegistrationsController < ApplicationController
+  skip_before_action :set_user
+
   def index
     @user = User.new
   end
@@ -18,6 +20,8 @@ class RegistrationsController < ApplicationController
       redirect_to registrations_path
     end
   end
+
+  def cred_login; end
 
   private
 

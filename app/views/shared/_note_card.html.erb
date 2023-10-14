@@ -1,0 +1,16 @@
+<div class="card m-1 p-3 w-25">
+  <div class="row">
+    <h3><%= link_to note.title, note %></h3>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-sm-9">
+      <%= note.first_words %>
+    </div>
+  </div>
+
+  <div class="row p-1">
+    <%= link_to 'Edit', edit_note_path(note), class: 'btn btn-warning btn-sm col-sm-2 mx-auto' %>
+    <%= link_to "Delete", note_path(note), data: { turbo_method: "delete", turbo_confirm: "Are you sure?"}, class: 'btn btn-danger btn-sm col-sm-3 mx-auto' %>
+  </div>
+</div>
