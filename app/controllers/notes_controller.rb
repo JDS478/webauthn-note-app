@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class NotesController < ApplicationController
-  before_action :set_note
+  before_action :set_note, only: %i[edit update destroy]
 
   def new
-    # @note = Note.new
+    @note = Note.new
   end
 
   def create
-    # @note = Note.new(note_params)
+    @note = Note.new(note_params)
 
     if @note.save
       redirect_to root_path
@@ -21,18 +21,15 @@ class NotesController < ApplicationController
 
   def edit; end
 
-  def update
-  end
+  def update; end
 
-  def destroy
-
-  end
+  def destroy; end
 
   private
 
   def note_params; end
 
   def set_note
-    # @note = Note.find(params[:id])
+    @note = Note.find(params[:id])
   end
 end
