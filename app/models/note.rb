@@ -5,6 +5,10 @@ class Note < ApplicationRecord
 
   validates :title, presence: true
 
+  def word_count
+    content.split(' ').length
+  end
+
   def first_words
     return 'No Content' if content.blank?
 
