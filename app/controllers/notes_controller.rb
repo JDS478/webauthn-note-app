@@ -2,7 +2,9 @@
 
 class NotesController < ApplicationController
   layout 'dash'
-  before_action :set_note, only: %i[edit update destroy]
+  before_action :set_note, only: %i[show edit update destroy]
+
+  def show; end
 
   def new
     @note = Note.new
@@ -32,7 +34,11 @@ class NotesController < ApplicationController
     end
   end
 
-  def destroy; end
+  def destroy
+    @note.delete
+
+    redirect_to root_path
+  end
 
   private
 

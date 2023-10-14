@@ -1,0 +1,9 @@
+<div class="row">
+  <h2 class="col-md-6">Your Notes</h2>
+</div>
+
+<div class="container-fluid d-flex flex-wrap justify-content-center">
+  <% @current_user.notes.each do |note| %>
+    <%= render partial: 'shared/note_card', locals: { note: } %>
+  <% end %>
+</div>
