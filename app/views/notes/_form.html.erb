@@ -1,0 +1,27 @@
+<div class="mx-auto my-5 w-75 border p-2">
+  <div class="row mb-3">
+    <h2 class="mb-2"><%= @note.new_record? ? 'New Note' : 'Edit Note' %><h2>
+    <div class="bg-danger">
+      <% if flash.notice %>
+        <div class="text-white">
+          <% flash.notice.each do |notice| %>
+            <p><%= notice %></p>
+          <% end %>
+          </div>
+      <% end %>
+  </div>
+  </div>
+
+  <%= form_with model: @note, class: 'form p-2' do |f| %>
+    <%= f.hidden_field :user_id, value: @current_user.id %>
+    <div class="mb-3 row">
+      <%= f.label :title, class: 'form-label' %>
+      <%= f.text_field :title, placeholder: 'Name...', class: 'form-control' %>
+    </div>
+    <div class="mb-3 row">
+      <%= f.label :content, class: 'form-label' %>
+      <%= f.text_area :content, placeholder: 'Content...', size: "70x5", class: 'form-control' %>
+    </div>
+    <%= f.submit class: 'btn btn-primary' %>
+  <% end %>
+</div>

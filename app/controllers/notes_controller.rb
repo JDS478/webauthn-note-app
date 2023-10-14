@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class NotesController < ApplicationController
+  layout 'dash'
   before_action :set_note, only: %i[edit update destroy]
 
   def new
@@ -21,13 +22,23 @@ class NotesController < ApplicationController
 
   def edit; end
 
-  def update; end
+  def update
+    if @note.update(note_params)
+      redirect_to root_path
+    else
+      flash[:notice] = @note.errors.full_messages.uniq
+
+      redirect_to edit_note_path(@note)
+    end
+  end
 
   def destroy; end
 
   private
 
-  def note_params; end
+  def note_params
+    params.require(:note).permit(:title, :content, :user_id)
+  end
 
   def set_note
     @note = Note.find(params[:id])
