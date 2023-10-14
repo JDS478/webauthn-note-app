@@ -4,5 +4,5 @@ WebAuthn.configure do |config|
   config.origin = ENV['WEBAUTHN_ORIGIN']
 
   # Relying Party name for display purposes
-  config.rp_name = "Demo Webauthn App"
+  config.rp_name = "Demo Note Webauthn App"
 end
