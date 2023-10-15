@@ -10,8 +10,9 @@ Rails.application.routes.draw do
 
   resources :notes, except: :index
 
-  resources :dashboard, only: :index do
+  resources :dashboard, only: %i[index destroy] do
     collection do
+      get :credentials
       post :callback
     end
   end

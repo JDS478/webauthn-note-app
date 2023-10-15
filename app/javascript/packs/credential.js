@@ -1,7 +1,7 @@
 import * as WebAuthn from "@github/webauthn-json"
 
 export default () => {
-  function getCSRFToken() {
+  const getCSRFToken = () => {
     const CSRFSelector = document.querySelector('meta[name="csrf-token"]')
     if (CSRFSelector) {
       return CSRFSelector.getAttribute("content")

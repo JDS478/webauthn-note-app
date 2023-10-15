@@ -6,7 +6,7 @@ class DashboardController < ApplicationController
   def index; end
 
   def credentials
-    @credential = @current_user.credentials
+    @credentials = @current_user.credentials
   end
 
   def cred_options
@@ -51,6 +51,15 @@ class DashboardController < ApplicationController
     ensure
       session.delete :challenge
     end
+  end
+
+  def destroy
+    return flash[:notice] = "You need at least one passkey!" if @current_user.credentials.length == 1
+
+    @credential = Credential.find(params[:id])
+    @credential.delete
+
+    redirect_to credentials_dashboard_index_path
   end
 
   def signout

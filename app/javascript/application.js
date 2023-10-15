@@ -4,8 +4,8 @@ import "@hotwired/turbo-rails";
 import "popper";
 import "bootstrap";
 
-import credential from 'helpers/credential';
+import credential from 'packs/credential';
 
-addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   credential();
 });
