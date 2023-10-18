@@ -11,7 +11,7 @@
             Account
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Credentials</a></li>
+            <li><%= link_to 'Credentials', credentials_dashboard_index_path, class: 'dropdown-item' %></li>
             <li><hr class="dropdown-divider"></li>
             <li><%= link_to 'Logout', signout_path, data: {turbo_method: :delete}, class: 'dropdown-item' %></li>
           </ul>
