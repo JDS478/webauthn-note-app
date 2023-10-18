@@ -39,7 +39,6 @@ export default () => {
 
   // Once created re-direct
   const callback = (url, body) => {
-    console.log('Hit callback')
     fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
@@ -51,9 +50,9 @@ export default () => {
       credentials: 'same-origin'
     }).then(function(response) {
       if (response.ok) {
-        window.location.replace("/")
+        window.location.replace("/dashboard/credentials")
       } else if (response.status < 500) {
-        response.text().then(showMessage);
+        console.log(response.text());
       } else {
         console.log("Sorry, something wrong happened.");
       }
@@ -70,10 +69,12 @@ export default () => {
     console.log("Creating new public key credential...");
   }
 
-  document.querySelector('#credential-btn').addEventListener('click', async () => {
-    const userOptions = await getUserOptions();
-    const callbackUrl = '/dashboard/callsback';
+  if (document.getElementById('credential-btn')) {
+    document.querySelector('#credential-btn').addEventListener('click', async () => {
+      const userOptions = await getUserOptions();
+      const callbackUrl = '/dashboard/callback';
 
-    create(callbackUrl, userOptions);
-  })
+      create(callbackUrl, userOptions);
+    })
+  }
 }
