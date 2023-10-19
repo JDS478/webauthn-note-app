@@ -5,7 +5,9 @@ import "popper";
 import "bootstrap";
 
 import credential from 'packs/credential';
+import credentialLogin from 'packs/credential_login';
 
 document.addEventListener("DOMContentLoaded", () => {
   credential();
+  credentialLogin();
 });
