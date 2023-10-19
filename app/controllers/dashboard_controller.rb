@@ -3,6 +3,8 @@
 class DashboardController < ApplicationController
   layout 'dash'
 
+  before_action :credential_check, only: :destroy
+
   def index; end
 
   def credentials
@@ -54,8 +56,6 @@ class DashboardController < ApplicationController
   end
 
   def destroy
-    return flash[:notice] = "You need at least one passkey!" if @current_user.credentials.length == 1
-
     @credential = Credential.find(params[:id])
     @credential.delete
 
@@ -66,5 +66,14 @@ class DashboardController < ApplicationController
     cookies.delete :signin_token
 
     redirect_to registrations_path
+  end
+
+  private
+
+  def credential_check
+    if @current_user.credentials.length == 1
+      flash[:notice] = "You need at least one passkey!"
+      redirect_to credentials_dashboard_index_path
+    end
   end
 end
