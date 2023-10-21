@@ -16,10 +16,10 @@ class DashboardController < ApplicationController
     create_options = WebAuthn::Credential.options_for_create(
       user: {
         id: @current_user.webauthn_id,
-        name: @current_user.username,
+        name: @current_user.username
       },
       exclude: @current_user.credentials.pluck(:external_id),
-      authenticator_selection: { user_verification: "required" }
+      authenticator_selection: { user_verification: 'required' }
     )
 
     # Store challenge for verification
@@ -44,7 +44,7 @@ class DashboardController < ApplicationController
       )
 
       if credential.save
-        render json: { status: "ok" }, status: :ok
+        render json: { status: 'ok' }, status: :ok
       else
         render json: "Couldn't register your PassKey", status: :unprocessable_entity
       end
@@ -71,9 +71,9 @@ class DashboardController < ApplicationController
   private
 
   def credential_check
-    if @current_user.credentials.length == 1
-      flash[:notice] = "You need at least one passkey!"
-      redirect_to credentials_dashboard_index_path
-    end
+    return unless @current_user.credentials.length == 1
+
+    flash[:notice] = 'You need at least one passkey!'
+    redirect_to credentials_dashboard_index_path
   end
 end
