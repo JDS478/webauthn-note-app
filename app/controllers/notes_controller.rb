@@ -2,6 +2,7 @@
 
 class NotesController < ApplicationController
   layout 'dash'
+
   before_action :set_note, only: %i[show edit update destroy]
 
   def show; end
