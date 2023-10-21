@@ -1,6 +1,6 @@
 # Webauthn Rails App
 
-My version of using paskeys for authentication.
+My version of using passkeys for authentication.
 
 - Create accounts
 - Create notes
