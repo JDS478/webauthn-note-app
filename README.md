@@ -2,6 +2,7 @@
 
 My version of using paskeys for authentication.
 
-* Create accounts and credentials for signin purposes
-* Store Credentials and use verifying platforms to authenticate
-* Create notes
+- Create accounts
+- Create notes
+- Store Passkeys and use verifying platforms to authenticate
+- Using importmaps and vanilla JS
