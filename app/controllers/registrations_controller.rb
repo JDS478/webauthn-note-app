@@ -24,45 +24,47 @@ class RegistrationsController < ApplicationController
   def cred_login; end
 
   def user_callback
-    user = User.find_by(username: params[:username] )
+    user = User.find_by(username: params[:user] )
 
     return no_user_error unless user
 
     options = WebAuthn::Credential.options_for_get(
       allow: user.credentials.map { |cred| cred.external_id }
     )
-    # Store the newly generated challenge somewhere so you can have it
-    # for the verification phase.
-    session[:authentication_challenge] = options.challenge
+
+    # Store challenge somewhere for verification and user id for lookup if successful
+    session[:authentication_challenge] = {
+      challenge: options.challenge,
+      user: user.id
+    }
 
     render json: options
   end
 
   def cred_callback
-    # Assuming you're using @github/webauthn-json package to send the `PublicKeyCredential` object back
-    # in params[:publicKeyCredential]:
-    webauthn_credential = WebAuthn::Credential.from_get(params[:publicKeyCredential])
+    webauthn_credential = WebAuthn::Credential.from_get(params)
 
-    credential = user.credentials.find_by(webauthn_id: webauthn_credential.id)
+    user = User.find(session[:authentication_challenge]['user'])
+    credential = user.credentials.find_by(external_id:  Base64.strict_encode64(webauthn_credential.raw_id))
 
     begin
       webauthn_credential.verify(
-        session[:authentication_challenge],
+        session[:authentication_challenge]['challenge'],
         public_key: credential.public_key,
         sign_count: credential.sign_count
       )
 
-      # Update the stored credential sign count with the value from `webauthn_credential.sign_count`
       credential.update!(sign_count: webauthn_credential.sign_count)
 
-      # Continue with successful sign in or 2FA verification...
+      login_user(user)
+      logger.info "Logged in #{user.username}"
 
-    rescue WebAuthn::SignCountVerificationError => e
-      # Cryptographic verification of the authenticator data succeeded, but the signature counter was less then or equal
-      # to the stored value. This can have several reasons and depending on your risk tolerance you can choose to fail or
-      # pass authentication. For more information see https://www.w3.org/TR/webauthn/#sign-counter
+      render json: { status: "ok" }, status: :ok
     rescue WebAuthn::Error => e
-      # Handle error
+      render json: "Verification failed: #{e.message}", status: :unprocessable_entity
+      logger.warn "Verification error: #{e.message}"
+    ensure
+      session.delete('authentication_challenge')
     end
   end
 
