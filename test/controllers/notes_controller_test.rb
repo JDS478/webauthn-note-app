@@ -28,6 +28,14 @@ class NotesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should delete note' do
+    assert_difference('Note.count', - 1) do
+      delete :destroy, params: {id: @note}
+    end
+
+    assert_redirected_to root_path
+  end
+
   test 'should create new notes' do
     assert_difference('Note.count') do
       post :create, params: { note: { title: 'A Note', content: 'Something', user_id: @user } }
@@ -38,5 +46,12 @@ class NotesControllerTest < ActionController::TestCase
 
     assert_equal('A Note', note.title)
     assert_equal('Something', note.content)
+  end
+
+  test 'should update existing note' do
+    patch :update, params: { id: @note , note: {content: 'New Content'} }
+    @note.reload
+
+    assert_equal('New Content', @note.content)
   end
 end
