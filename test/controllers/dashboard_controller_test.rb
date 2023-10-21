@@ -3,7 +3,13 @@
 require 'test_helper'
 
 class DashboardControllerTest < ActionController::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  setup do
+    select_user_session
+  end
+
+  test 'should get dashboard index' do
+    get :index
+
+    assert_response :success
+  end
 end
