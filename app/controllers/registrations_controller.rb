@@ -23,7 +23,50 @@ class RegistrationsController < ApplicationController
 
   def cred_login; end
 
-  def cred_callback; end
+  def user_callback
+    user = User.find_by(username: params[:user] )
+
+    return no_user_error unless user
+
+    options = WebAuthn::Credential.options_for_get(
+      allow: user.credentials.map { |cred| cred.external_id }
+    )
+
+    # Store challenge somewhere for verification and user id for lookup if successful
+    session[:authentication_challenge] = {
+      challenge: options.challenge,
+      user: user.id
+    }
+
+    render json: options
+  end
+
+  def cred_callback
+    webauthn_credential = WebAuthn::Credential.from_get(params)
+
+    user = User.find(session[:authentication_challenge]['user'])
+    credential = user.credentials.find_by(external_id:  Base64.strict_encode64(webauthn_credential.raw_id))
+
+    begin
+      webauthn_credential.verify(
+        session[:authentication_challenge]['challenge'],
+        public_key: credential.public_key,
+        sign_count: credential.sign_count
+      )
+
+      credential.update!(sign_count: webauthn_credential.sign_count)
+
+      login_user(user)
+      logger.info "Logged in #{user.username}"
+
+      render json: { status: "ok" }, status: :ok
+    rescue WebAuthn::Error => e
+      render json: "Verification failed: #{e.message}", status: :unprocessable_entity
+      logger.warn "Verification error: #{e.message}"
+    ensure
+      session.delete('authentication_challenge')
+    end
+  end
 
   private
 
@@ -33,5 +76,10 @@ class RegistrationsController < ApplicationController
 
   def user_params
     params.require(:user).permit(:username)
+  end
+
+  def no_user_error
+    logger.warn 'No user found for given username'
+    render json: { error: 'No User found' }
   end
 end

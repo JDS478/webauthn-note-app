@@ -5,14 +5,19 @@
   </div>
 
   <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Username</label>
-    <input type="username" class="form-control" id="username-input">
+    <label for="username" class="form-label">Username</label>
+    <input name="username" type="username" class="form-control" autofocus id="username-input" placeholder="Username...">
   </div>
-
-  <button class='btn btn-sm btn-primary'>Signin</button>
+  <button id='cred-login-btn' class='btn btn-sm btn-primary'>Signin</button>
 </div>
 
 <script>
-// TODO Setup enter click here keycode === 13
-  // document.addEventListener('keyup', (e) => console.log(e.keyCode))
+  const loginButton = document.querySelector('#cred-login-btn');
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' || event.keyCode === 13) {
+      loginButton.click();
+    }
+  });
+
 </script>
