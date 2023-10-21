@@ -30,7 +30,7 @@ class NotesControllerTest < ActionController::TestCase
 
   test 'should delete note' do
     assert_difference('Note.count', - 1) do
-      delete :destroy, params: {id: @note}
+      delete :destroy, params: { id: @note }
     end
 
     assert_redirected_to root_path
@@ -49,7 +49,7 @@ class NotesControllerTest < ActionController::TestCase
   end
 
   test 'should update existing note' do
-    patch :update, params: { id: @note , note: {content: 'New Content'} }
+    patch :update, params: { id: @note, note: { content: 'New Content' } }
     @note.reload
 
     assert_equal('New Content', @note.content)
