@@ -63,9 +63,9 @@ export default () => {
       if (response.ok) {
         window.location.replace("/")
       } else if (response.status < 500) {
-        response.text().then(showMessage);
+        console.log(response.text());
       } else {
-        showMessage("Sorry, something wrong happened.");
+        console.log("Sorry, something wrong happened.");
       }
     });
   }
