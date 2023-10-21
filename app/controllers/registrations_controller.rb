@@ -24,12 +24,12 @@ class RegistrationsController < ApplicationController
   def cred_login; end
 
   def user_callback
-    user = User.find_by(username: params[:user] )
+    user = User.find_by(username: params[:user])
 
     return no_user_error unless user
 
     options = WebAuthn::Credential.options_for_get(
-      allow: user.credentials.map { |cred| cred.external_id }
+      allow: user.credentials.map(&:external_id)
     )
 
     # Store challenge somewhere for verification and user id for lookup if successful
@@ -45,7 +45,7 @@ class RegistrationsController < ApplicationController
     webauthn_credential = WebAuthn::Credential.from_get(params)
 
     user = User.find(session[:authentication_challenge]['user'])
-    credential = user.credentials.find_by(external_id:  Base64.strict_encode64(webauthn_credential.raw_id))
+    credential = user.credentials.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
 
     begin
       webauthn_credential.verify(
@@ -59,7 +59,7 @@ class RegistrationsController < ApplicationController
       login_user(user)
       logger.info "Logged in #{user.username}"
 
-      render json: { status: "ok" }, status: :ok
+      render json: { status: 'ok' }, status: :ok
     rescue WebAuthn::Error => e
       render json: "Verification failed: #{e.message}", status: :unprocessable_entity
       logger.warn "Verification error: #{e.message}"

@@ -2,8 +2,14 @@
 
 require 'test_helper'
 
-class DashboardControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+class DashboardControllerTest < ActionController::TestCase
+  setup do
+    select_user_session
+  end
+
+  test 'should get dashboard index' do
+    get :index
+
+    assert_response :success
+  end
 end
