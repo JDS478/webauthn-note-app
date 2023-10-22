@@ -38,7 +38,7 @@ class DashboardController < ApplicationController
 
       credential = @current_user.credentials.build(
         external_id: Base64.strict_encode64(webauthn_credential.raw_id),
-        nickname: params[:credential_nickname],
+        nickname: "created_#{Time.now.strftime('%d_%m_%y')}",
         public_key: webauthn_credential.public_key,
         sign_count: webauthn_credential.sign_count
       )
