@@ -79,7 +79,12 @@ export default () => {
       }
 
       const userOptions = await getLoginOptions(username);
-      get(userOptions);
+      if (userOptions.error) {
+        console.log('Error with options retrieval');
+        return;
+      } else {
+        get(userOptions);
+      }
     })
   }
 }
