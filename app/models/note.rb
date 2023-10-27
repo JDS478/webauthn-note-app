@@ -13,6 +13,6 @@ class Note < ApplicationRecord
     return 'No Content' if content.blank?
 
     line = content.split(/\s/)
-    line[0...8].join(' ') + '...'
+    "#{line[0...8].join(' ')}..."
   end
 end
