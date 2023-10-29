@@ -11,10 +11,10 @@ export default () => {
     }
   }
 
-  const getErrorBox = () => { document.querySelector('#errors-box') }
-
   // Retrieve relevant JSON for creation
   const getUserOptions = async () => {
+    const errorBox = document.querySelector('#errors-box');
+
     try {
       const response = await fetch('/dashboard/cred_options', {
         method: "GET",
@@ -30,17 +30,21 @@ export default () => {
         const data = await response.json();
         return data;
       } else {
+        errorBox.innerHTML = "<p class='text-danger'>Error with retrieval!</p>"
         console.log("Error retrieving options");
         return null;
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+      errorBox.innerHTML = "<p class='text-danger'>Error with retrieval!</p>"
       return null;
     }
   }
 
   // Once created re-direct
   const callback = (url, body) => {
+    const errorBox = document.querySelector('#errors-box');
+
     fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
@@ -56,6 +60,7 @@ export default () => {
       } else if (response.status < 500) {
         console.log(response.text());
       } else {
+        errorBox.innerHTML = "<p class='text-danger'>Something wrong happened, try again!</p>"
         console.log("Sorry, something wrong happened.");
       }
     });
