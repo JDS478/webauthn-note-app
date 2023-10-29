@@ -4,6 +4,7 @@ AllCops:
     - "config/**/*"
     - "script/**/*"
     - "bin/*"
+    - "Gemfile"
 Style/Documentation:
   Enabled: false
 Metrics/AbcSize:
