@@ -10,6 +10,8 @@ export default () => {
     }
   }
 
+  const getErrorBox = () => { document.querySelector('#errors-box') }
+
   const get = (credentialOptions) => {
     WebAuthn.get({ "publicKey": credentialOptions }).then(function(credential) {
       callback("/registrations/cred_callback", credential);
@@ -21,6 +23,7 @@ export default () => {
   }
 
   const getLoginOptions = async (username) => {
+    const errorBox = getErrorBox();
     const userUrl = '/registrations/user_callback';
     const data = {user: username};
 
