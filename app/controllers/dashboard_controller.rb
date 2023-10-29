@@ -71,7 +71,7 @@ class DashboardController < ApplicationController
   private
 
   def credential_check
-    return if @current_user.credentials.count >= 1
+    return if @current_user.credentials.count > 1
 
     flash[:notice] = 'You need at least one passkey!'
     redirect_to credentials_dashboard_index_path
