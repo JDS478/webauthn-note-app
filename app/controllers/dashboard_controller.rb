@@ -6,7 +6,6 @@ class DashboardController < ApplicationController
   before_action :credential_check, only: :destroy
   before_action :signout_check, only: :signout
 
-
   def index; end
 
   def credentials
