@@ -3,7 +3,9 @@
 class DashboardController < ApplicationController
   layout 'dash'
 
-  before_action :credential_check, only: %i[destroy signout]
+  before_action :credential_check, only: :destroy
+  before_action :signout_check, only: :signout
+
 
   def index; end
 
@@ -72,6 +74,13 @@ class DashboardController < ApplicationController
 
   def credential_check
     return if @current_user.credentials.count > 1
+
+    flash[:notice] = 'You need at least one passkey!'
+    redirect_to credentials_dashboard_index_path
+  end
+
+  def signout_check
+    return if @current_user.credentials.count >= 1
 
     flash[:notice] = 'You need at least one passkey!'
     redirect_to credentials_dashboard_index_path
