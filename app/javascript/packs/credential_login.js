@@ -10,8 +10,6 @@ export default () => {
     }
   }
 
-  const getErrorBox = () => { document.querySelector('#errors-box') }
-
   const get = (credentialOptions) => {
     WebAuthn.get({ "publicKey": credentialOptions }).then(function(credential) {
       callback("/registrations/cred_callback", credential);
@@ -23,7 +21,6 @@ export default () => {
   }
 
   const getLoginOptions = async (username) => {
-    const errorBox = getErrorBox();
     const userUrl = '/registrations/user_callback';
     const data = {user: username};
 
@@ -43,7 +40,8 @@ export default () => {
         const data = await response.json();
         return data;
       } else {
-        console.log("Error retrieving options");
+        errorBox.innerHTML = "<p class='text-danger'>No user found!</p>"
+        console.log("No user found!");
         return;
       }
     } catch (error) {
@@ -76,13 +74,17 @@ export default () => {
 
   if (document.getElementById('cred-login-btn')) {
     document.querySelector('#cred-login-btn').addEventListener('click', async () => {
+      const errorBox = document.querySelector('#errors-box');
       const username = document.querySelector('#username-input').value;
+
       if (username === '') {
+        errorBox.innerHTML = "<p class='text-danger'>No Username given!</p>"
         return console.error('No Username given!')
       }
 
       const userOptions = await getLoginOptions(username);
       if (userOptions.error) {
+        errorBox.innerHTML = "<p class='text-danger'>No user found or error with credential retrieval!</p>"
         console.log('Error with options retrieval');
         return;
       } else {

@@ -11,6 +11,8 @@ export default () => {
     }
   }
 
+  const getErrorBox = () => { document.querySelector('#errors-box') }
+
   // Retrieve relevant JSON for creation
   const getUserOptions = async () => {
     try {
