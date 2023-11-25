@@ -1,6 +1,5 @@
 <tr class="table-hover">
-  <td><%= credential.id %></td>
   <td><%= credential.nickname %></td>
-  <td><%= credential.created_at %></td>
+  <td><%= credential.created_at.strftime('%d-%m-%Y') %></td>
   <td><%= link_to 'Delete', dashboard_path(credential.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: 'btn btn-danger btn-sm' %></td>
 </tr>
