@@ -1,9 +1,60 @@
+const getCSRFToken = () => {
+  const CSRFSelector = document.querySelector('meta[name="csrf-token"]')
+  if (CSRFSelector) {
+    return CSRFSelector.getAttribute("content")
+  } else {
+    return null
+  }
+}
+
+const base64url = {
+  encode: function(buffer) {
+    const base64 = window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    return base64.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+  },
+  decode: function(base64url) {
+    const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+    const binStr = window.atob(base64);
+    const bin = new Uint8Array(binStr.length);
+    for (let i = 0; i < binStr.length; i++) {
+      bin[i] = binStr.charCodeAt(i);
+    }
+    return bin.buffer;
+  }
+}
+
+
+async function _fetch(path, payload = '') {
+  const headers = {
+    'X-Requested-With': 'XMLHttpRequest',
+    "X-CSRF-Token": getCSRFToken()
+  };
+  if (payload && !(payload instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+    payload = JSON.stringify(payload);
+  }
+  const res = await fetch(path, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: headers,
+    body: payload,
+  });
+  if (res.status === 200) {
+    // Server authentication succeeded
+    return res.json();
+  } else {
+    // Server authentication failed
+    const result = await res.json();
+    throw new Error(result.error);
+  }
+};
+
 // TODO: Add an ability to authenticate with a passkey: Create the authenticate() function.
 export async function authenticate() {
 
   // TODO: Add an ability to authenticate with a passkey: Obtain the
   // challenge and other options from the server endpoint.
-  const options = await _fetch('/auth/signinRequest');
+  const options = await _fetch('/registrations/user_callback');
 
   // TODO: Add an ability to authenticate with a passkey: Locally verify
   // the user and get a credential.
@@ -41,5 +92,48 @@ export async function authenticate() {
     userHandle,
   };
 
-  return await _fetch(`/auth/signinResponse`, credential);
+  return await _fetch(`/registrations/cred_callback`, credential);
 };
+
+const conditional = async () => {
+  if (
+    window.PublicKeyCredential
+      && PublicKeyCredential.isConditionalMediationAvailable
+  ) {
+    try {
+      // Is conditional UI available in this browser?
+      const cma = await PublicKeyCredential.isConditionalMediationAvailable();
+      if (cma) {
+        console.log('cma possible')
+        // If conditional UI is available, invoke the authenticate() function.
+        const user = await authenticate();
+        if (user) {
+          // Proceed only when authentication succeeds.
+          document.querySelector('#username-input').value = user.username;
+          console.log('After');
+          location.href = '/';
+        } else {
+          throw new Error('User not found.');
+        }
+      }
+    } catch (e) {
+      // loading.stop();
+      // A NotAllowedError indicates that the user canceled the operation.
+      if (e.name !== 'NotAllowedError') {
+        console.error(e);
+        alert(e.message);
+      }
+    }
+  }
+};
+
+export default () => {
+  const element = document.querySelector('#username-input');
+  if (element) {
+    // console.log('Here login')
+    // element.addEventListener('change', () => {
+    //   conditional();
+    // })
+    conditional()
+  }
+}
