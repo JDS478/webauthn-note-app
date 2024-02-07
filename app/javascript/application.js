@@ -11,7 +11,7 @@ import passkeyLogins from 'packs/passkey_logins';
 
 document.addEventListener("turbo:load", () => {
   // credential();
-  // credentialLogin();
+  credentialLogin();
   passkeys();
   // passkeyLogins();
 });

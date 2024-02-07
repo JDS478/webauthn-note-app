@@ -21,8 +21,8 @@ class DashboardController < ApplicationController
       },
       exclude: @current_user.credentials.pluck(:external_id),
       authenticator_selection: {
-        user_verification: 'preferred',
-        authenticator_attachment: 'platform',
+        # user_verification: 'preferred',
+        # authenticator_attachment: 'platform',
         require_resident_key: true
       }
     )
