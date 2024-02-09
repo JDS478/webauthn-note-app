@@ -91,12 +91,10 @@ async function registerCredential() {
 
   // Base64URL encode some values.
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-  const attestationObject =
-  base64url.encode(cred.response.attestationObject);
+  const attestationObject = base64url.encode(cred.response.attestationObject);
 
   // Obtain transports.
-  const transports = cred.response.getTransports ?
-  cred.response.getTransports() : [];
+  const transports = cred.response.getTransports ? cred.response.getTransports() : [];
 
   credential.response = {
     clientDataJSON,
@@ -106,8 +104,9 @@ async function registerCredential() {
 
   const resp = await _fetch('/dashboard/callback', credential);
 
-  if (resp.ok) {
-    window.location.replace('/')
+  // console.log(resp.status === 'ok')
+  if (resp.status === 'ok') {
+    window.location.replace('/dashboard/credentials')
   } else {
     console.log('Verification error!')
   }

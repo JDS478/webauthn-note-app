@@ -90,7 +90,8 @@ export async function authenticate() {
     userHandle,
   };
 
-  return await _fetch(`/registrations/cred_callback`, credential);
+  const res = await _fetch(`/registrations/cred_callback`, credential);
+  return res
 };
 
 const conditional = async () => {
@@ -105,7 +106,8 @@ const conditional = async () => {
         console.log('cma possible')
         // If conditional UI is available, invoke the authenticate() function.
         const user = await authenticate();
-        if (user.ok) {
+        console.log(user)
+        if (user) {
           // Proceed only when authentication succeeds.
           document.querySelector('#username-input').value = user.username;
           location.href = '/';
