@@ -4,5 +4,6 @@ WebAuthn.configure do |config|
   config.origin = ENV['WEBAUTHN_ORIGIN']
 
   # Relying Party name for display purposes
-  config.rp_name = "MyNoteApp"
+  config.rp_id = ENV['RP_ID']
+  config.rp_name = 'MyNoteApp'
 end
