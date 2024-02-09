@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :dashboard, only: %i[index destroy] do
     collection do
       get :credentials
-      get :cred_options
+      post :cred_options
       post :callback
     end
   end
