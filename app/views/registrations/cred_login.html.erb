@@ -8,12 +8,12 @@
 
   <div class="mb-3">
     <label for="username" class="form-label">Username</label>
-    <input name="username" type="username" class="form-control" autocomplete='username webauthn' id="username-input" placeholder="Username...">
+    <input name="username" type="username" class="form-control" autofocus id="username-input" placeholder="Username...">
   </div>
   <button id='cred-login-btn' class='btn btn-sm btn-primary'>Signin</button>
 </div>
 
-<%# <script>
+<script>
   const loginButton = document.querySelector('#cred-login-btn');
 
   document.addEventListener('keydown', function(event) {
@@ -22,4 +22,4 @@
     }
   });
 
-</script> %>
+</script>
