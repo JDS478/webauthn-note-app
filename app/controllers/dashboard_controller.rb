@@ -20,11 +20,7 @@ class DashboardController < ApplicationController
         name: @current_user.username
       },
       exclude: @current_user.credentials.pluck(:external_id),
-      authenticator_selection: {
-        user_verification: 'preferred',
-        authenticator_attachment: 'platform',
-        require_resident_key: true
-      }
+      authenticator_selection: { user_verification: 'required' }
     )
 
     # Store challenge for verification

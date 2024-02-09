@@ -24,9 +24,13 @@ class RegistrationsController < ApplicationController
   def cred_login; end
 
   def user_callback
-    # user = User.find_by(username: params[:user])
+    user = User.find_by(username: params[:user])
 
-    # return no_user_error unless user
+    return no_user_error unless user
+
+    options = WebAuthn::Credential.options_for_get(
+      allow: user.credentials.map(&:external_id)
+    )
 
     cred = WebAuthn::Credential.options_for_get(
       allow: [],
@@ -41,7 +45,10 @@ class RegistrationsController < ApplicationController
     # }
 
     # Store challenge somewhere for verification and user id for lookup if successful
-    session[:authentication_challenge] = {challenge: cred.challenge}
+    session[:authentication_challenge] = {
+      challenge: options.challenge,
+      user: user.id
+    }
 
     render json: options
   end
