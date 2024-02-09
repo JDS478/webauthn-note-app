@@ -104,13 +104,18 @@ async function registerCredential() {
     transports
   };
 
-  return await _fetch('/dashboard/callback', credential);
+  const resp = await _fetch('/dashboard/callback', credential);
+
+  if (resp.ok) {
+    window.location.replace('/')
+  } else {
+    console.log('Verification error!')
+  }
 };
 
 export default () => {
   const btn = document.querySelector('#credential-btn');
   if (btn) {
-    console.log('Here')
     btn.addEventListener('click', () => {
       registerCredential();
     })

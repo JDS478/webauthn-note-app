@@ -67,7 +67,6 @@ export async function authenticate() {
   // Invoke the WebAuthn get() function.
   const cred = await navigator.credentials.get({
     publicKey: options,
-
     // Request a conditional UI.
     mediation: 'conditional'
   });
@@ -80,8 +79,7 @@ export async function authenticate() {
 
   // Base64URL encode some values.
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-  const authenticatorData =
-  base64url.encode(cred.response.authenticatorData);
+  const authenticatorData = base64url.encode(cred.response.authenticatorData);
   const signature = base64url.encode(cred.response.signature);
   const userHandle = base64url.encode(cred.response.userHandle);
 
@@ -107,21 +105,17 @@ const conditional = async () => {
         console.log('cma possible')
         // If conditional UI is available, invoke the authenticate() function.
         const user = await authenticate();
-        if (user) {
+        if (user.ok) {
           // Proceed only when authentication succeeds.
           document.querySelector('#username-input').value = user.username;
-          console.log('After');
           location.href = '/';
         } else {
           throw new Error('User not found.');
         }
       }
     } catch (e) {
-      // loading.stop();
-      // A NotAllowedError indicates that the user canceled the operation.
       if (e.name !== 'NotAllowedError') {
         console.error(e);
-        alert(e.message);
       }
     }
   }
@@ -130,10 +124,6 @@ const conditional = async () => {
 export default () => {
   const element = document.querySelector('#username-input');
   if (element) {
-    // console.log('Here login')
-    // element.addEventListener('change', () => {
-    //   conditional();
-    // })
-    conditional()
+    conditional();
   }
 }

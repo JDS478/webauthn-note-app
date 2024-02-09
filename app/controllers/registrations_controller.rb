@@ -28,13 +28,18 @@ class RegistrationsController < ApplicationController
 
     # return no_user_error unless user
 
-    cred = WebAuthn::Credential.options_for_get()
-    options = {
-      'challenge': cred.challenge,
-      'rpId': ENV['WEBAUTHN_ORIGIN'],
-      'allowCredentials': [],
-      'userVerification': 'preferred'
-    }
+    cred = WebAuthn::Credential.options_for_get(
+      allow: [],
+      user_verification: 'preferred'
+    )
+
+    # options = {
+    #   'challenge': cred.challenge,
+    #   'rpId': ENV['WEBAUTHN_ORIGIN'],
+    #   'allowCredentials': [],
+    #   'userVerification': 'preferred'
+    # }
+
     # Store challenge somewhere for verification and user id for lookup if successful
     session[:authentication_challenge] = {challenge: cred.challenge}
 
@@ -44,9 +49,10 @@ class RegistrationsController < ApplicationController
   def cred_callback
     webauthn_credential = WebAuthn::Credential.from_get(params)
 
-    raise
     credential = Credential.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
+
     raise 'No credential' unless credential
+
     user = credential.user
 
     begin
