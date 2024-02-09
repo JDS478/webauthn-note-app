@@ -32,18 +32,6 @@ class RegistrationsController < ApplicationController
       allow: user.credentials.map(&:external_id)
     )
 
-    cred = WebAuthn::Credential.options_for_get(
-      allow: [],
-      user_verification: 'preferred'
-    )
-
-    # options = {
-    #   'challenge': cred.challenge,
-    #   'rpId': ENV['WEBAUTHN_ORIGIN'],
-    #   'allowCredentials': [],
-    #   'userVerification': 'preferred'
-    # }
-
     # Store challenge somewhere for verification and user id for lookup if successful
     session[:authentication_challenge] = {
       challenge: options.challenge,
@@ -56,11 +44,8 @@ class RegistrationsController < ApplicationController
   def cred_callback
     webauthn_credential = WebAuthn::Credential.from_get(params)
 
-    credential = Credential.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
-
-    raise 'No credential' unless credential
-
-    user = credential.user
+    user = User.find(session[:authentication_challenge]['user'])
+    credential = user.credentials.find_by(external_id: Base64.strict_encode64(webauthn_credential.raw_id))
 
     begin
       webauthn_credential.verify(
