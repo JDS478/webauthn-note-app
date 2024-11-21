@@ -1,4 +1,8 @@
+require: rubocop-rails
+
 AllCops:
+  NewCops: disable
+  SuggestExtensions: false
   Exclude:
     - "db/**/*"
     - "config/**/*"
@@ -11,3 +15,7 @@ Metrics/AbcSize:
   Enabled: false
 Metrics/MethodLength:
   Max: 20
+Rails/InverseOf:
+  Enabled: false
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
