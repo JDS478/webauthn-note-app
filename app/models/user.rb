@@ -3,8 +3,8 @@
 class User < ApplicationRecord
   before_create :initialize_webauthn_id
 
-  has_many :credentials
-  has_many :notes
+  has_many :credentials, dependent: :destroy
+  has_many :notes, dependent: :destroy
 
   validates :username, uniqueness: true
 
